@@ -96,7 +96,8 @@ public class UDPClient extends Client
             //========================CLIENT LOGIC ENDS HERE=======================
             
             //==========================STATISTICS ANALYSIS========================
-            ChartStatsWorker stats = new ChartStatsWorker(timeDiff, 20, counter, this.pkgsize, this.sampling);
+            ChartStatsWorker stats = new ChartStatsWorker(timeDiff, ChartStatsWorker.DEFAULT_NUMBER_OF_HISTOGRAM_DIVISIONS,
+                    counter, this.pkgsize, this.sampling);
             Thread statsThread = new Thread(stats);
             statsThread.start();
             //=======================END OF STATISTICS ANALYSIS====================

@@ -15,6 +15,8 @@ import org.jfree.data.statistics.HistogramType;
  */
 public class ChartStatsWorker implements Runnable
 {
+    public static final int DEFAULT_NUMBER_OF_HISTOGRAM_DIVISIONS = 20;
+    
     private long [] timeDiffData = null;
     private int numberOfGraphIntervals;
     int nSamples;

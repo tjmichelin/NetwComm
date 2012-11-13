@@ -29,7 +29,7 @@ public class LogStatsWorker implements Runnable
     
      private void saveData2File(String fileName)
     {
-        String savingPath = new File(".\\log").getAbsolutePath();
+        String savingPath = new File(".").getAbsolutePath();
         BufferedWriter writer = null;
         
         try

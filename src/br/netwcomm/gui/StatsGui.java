@@ -39,19 +39,25 @@ public class StatsGui extends javax.swing.JFrame
         this.dataPoints = _dataPoints;
         this.packageSize = _packageSize;
         
+        this.pack();
+        
         startGuiUp();
     }
 
     private void startGuiUp()
-    {
-        this.setLocationRelativeTo(null);
-        
+    {   
         printMessage("******Transmission Statistics******");
         printMessage("Number of samples: " + Integer.toString(dataPoints));
         printMessage("Sample size (bytes): " + Integer.toString(this.packageSize));
-        printMessage("Transmission's maximum time interval: " + Long.toString(maxTime) + "(ns)");
-        printMessage("Transmission's minimum time interval: " + Long.toString(minTime) + "(ns)");
+        printMessage("Transmission's maximum time interval: " + Long.toString(maxTime) + " (ns)");
+        printMessage("Transmission's minimum time interval: " + Long.toString(minTime) +  " (ns)");
         
+        this.getContentPane().add(this.tblStats, BorderLayout.NORTH);
+        this.getContentPane().add(this.pnlGraph, BorderLayout.CENTER);
+        this.getContentPane().add(this.pnlInfo, BorderLayout.SOUTH);
+        this.getContentPane().validate();
+        
+        this.setLocationRelativeTo(null);
     }
     
     public void printMessage(String message)
@@ -104,8 +110,11 @@ public class StatsGui extends javax.swing.JFrame
         });
         tblStats.add(btnClose);
 
+        getContentPane().add(tblStats, java.awt.BorderLayout.NORTH);
+
         pnlGraph.setBorder(javax.swing.BorderFactory.createTitledBorder("Statiscs Histogram"));
         pnlGraph.setLayout(new java.awt.BorderLayout());
+        getContentPane().add(pnlGraph, java.awt.BorderLayout.CENTER);
 
         pnlInfo.setBorder(javax.swing.BorderFactory.createTitledBorder("Statistics Information"));
 
@@ -119,7 +128,7 @@ public class StatsGui extends javax.swing.JFrame
             pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlInfoLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(scrollStatsInfo)
+                .addComponent(scrollStatsInfo, javax.swing.GroupLayout.DEFAULT_SIZE, 580, Short.MAX_VALUE)
                 .addContainerGap())
         );
         pnlInfoLayout.setVerticalGroup(
@@ -130,28 +139,7 @@ public class StatsGui extends javax.swing.JFrame
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(tblStats, javax.swing.GroupLayout.DEFAULT_SIZE, 612, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(pnlGraph, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(pnlInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(tblStats, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(pnlGraph, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(pnlInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(257, Short.MAX_VALUE))
-        );
+        getContentPane().add(pnlInfo, java.awt.BorderLayout.SOUTH);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -161,13 +149,13 @@ public class StatsGui extends javax.swing.JFrame
     }//GEN-LAST:event_btnCloseActionPerformed
 
     private void btnSaveGraphActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveGraphActionPerformed
-        String savingPath = new File(".\\log\\").getAbsolutePath();
+        String savingPath = new File(".").getAbsolutePath();
         String fileName = "Histogram_" + Long.toString(System.currentTimeMillis()) + ".png";
         
         try
         {
             ChartUtilities.saveChartAsPNG(new File(fileName), this.chart.getChart(), 600, 500);
-            JOptionPane.showMessageDialog(this, "Statistics Graph Saved in " + savingPath, 
+            JOptionPane.showMessageDialog(this, "Statistics Graph Saved in:\n" + savingPath, 
                     "Graph Saved Information", JOptionPane.INFORMATION_MESSAGE);
         } catch (IOException ex)
         {
