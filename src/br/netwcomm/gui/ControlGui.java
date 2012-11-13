@@ -102,6 +102,7 @@ public class ControlGui extends javax.swing.JFrame implements InternalMessageHan
     public synchronized void printMessage(String message)
     {
         this.txtCommOut.append(message + "\n");
+        this.txtCommOut.setCaretPosition(this.txtCommOut.getDocument().getLength());
     }
     
     /**

@@ -29,7 +29,7 @@ public class LogStatsWorker implements Runnable
     
      private void saveData2File(String fileName)
     {
-        String savingPath = new File(".").getAbsolutePath();
+        String savingPath = new File(".\\log").getAbsolutePath();
         BufferedWriter writer = null;
         
         try
@@ -47,6 +47,10 @@ public class LogStatsWorker implements Runnable
         catch (IOException ex) 
         {
             Logger.getLogger(StatsGui.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        catch(Exception e)
+        {
+            System.out.println("Error: " + e.getMessage());
         }
     }
 }

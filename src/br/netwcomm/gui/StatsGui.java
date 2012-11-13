@@ -13,29 +13,52 @@ import org.jfree.chart.ChartUtilities;
  *
  * @author Thiago
  */
-public class StatsGui extends javax.swing.JFrame 
+public class StatsGui extends javax.swing.JFrame
 {
     private ChartPanel chart;
+    private long maxTime;
+    private long minTime;
+    private int dataPoints;
+    private int packageSize;
     
     /**
      * Creates new form StatsGui
      */
-    public StatsGui(ChartPanel graph) 
+    public StatsGui(ChartPanel graph, long _maxTime, long _minTime, int _dataPoints,
+            int _packageSize) 
     {
         initComponents();
-        startGuiUp();
         
         this.chart = graph;
         
         this.pnlGraph.add(graph, BorderLayout.CENTER);
         this.pnlGraph.validate();
+        
+        this.maxTime = _maxTime;
+        this.minTime = _minTime;
+        this.dataPoints = _dataPoints;
+        this.packageSize = _packageSize;
+        
+        startGuiUp();
     }
 
     private void startGuiUp()
     {
         this.setLocationRelativeTo(null);
+        
+        printMessage("******Transmission Statistics******");
+        printMessage("Number of samples: " + Integer.toString(dataPoints));
+        printMessage("Sample size (bytes): " + Integer.toString(this.packageSize));
+        printMessage("Transmission's maximum time interval: " + Long.toString(maxTime) + "(ns)");
+        printMessage("Transmission's minimum time interval: " + Long.toString(minTime) + "(ns)");
+        
     }
     
+    public void printMessage(String message)
+    {
+        this.txtStatsInfo.append(message + "\n");
+        this.txtStatsInfo.setCaretPosition(this.txtStatsInfo.getDocument().getLength());
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -53,7 +76,7 @@ public class StatsGui extends javax.swing.JFrame
         scrollStatsInfo = new javax.swing.JScrollPane();
         txtStatsInfo = new javax.swing.JTextArea();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Transmission Statistics Overview");
 
         tblStats.setFloatable(false);
@@ -138,7 +161,7 @@ public class StatsGui extends javax.swing.JFrame
     }//GEN-LAST:event_btnCloseActionPerformed
 
     private void btnSaveGraphActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveGraphActionPerformed
-        String savingPath = new File(".").getAbsolutePath();
+        String savingPath = new File(".\\log\\").getAbsolutePath();
         String fileName = "Histogram_" + Long.toString(System.currentTimeMillis()) + ".png";
         
         try

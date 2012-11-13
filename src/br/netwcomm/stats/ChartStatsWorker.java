@@ -1,6 +1,7 @@
 package br.netwcomm.stats;
 
 import br.netwcomm.gui.StatsGui;
+import java.awt.Color;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -37,13 +38,18 @@ public class ChartStatsWorker implements Runnable
         
         for(int i = 0; i < dataseries.length; i++)
         {
-            castedDataSeries[i] = (double)dataseries[i]/(1e-6);
+            castedDataSeries[i] = (double)dataseries[i]/(1e6);
         }
         
         return castedDataSeries;
     }
     
-    private double maxTime(long [] dataseries)
+    private double dMaxTime(long [] dataseries)
+    {       
+        return (double) lMaxTime(dataseries) /(1e6);
+    }
+    
+    private long lMaxTime(long [] dataseries)
     {
         long max = -1;
         
@@ -55,10 +61,15 @@ public class ChartStatsWorker implements Runnable
             }
         }
         
-        return (double) max/(1e-6);
+        return max;
     }
     
-    private double minTime(long [] dataseries)
+    private double dMinTime(long [] dataseries)
+    {
+        return (double) lMinTime(dataseries) /(1e6);
+    }
+    
+    private long lMinTime(long [] dataseries)
     {
         long min = Long.MAX_VALUE;
         
@@ -70,22 +81,30 @@ public class ChartStatsWorker implements Runnable
             }
         }
         
-        return (double) min/(1e-6);
+        return min;
     }
     
     @Override
     public void run()
     {
         double [] timeDiffStats = forceTypeCast(this.timeDiffData);
+        long lmin, lmax;
+        double dmin, dmax;
         
         LogStatsWorker logworker = new LogStatsWorker(timeDiffData);
         Thread log = new Thread(logworker);
         log.start();
         
+        dmin = this.dMinTime(timeDiffData);
+        dmax = this.dMaxTime(timeDiffData);
+        
+        lmin = this.lMinTime(timeDiffData);
+        lmax = this.lMaxTime(timeDiffData);
+        
         HistogramDataset dataset = new HistogramDataset();
         dataset.setType(HistogramType.FREQUENCY);
         dataset.addSeries("Time Difference", timeDiffStats, numberOfGraphIntervals,
-                minTime(this.timeDiffData), maxTime(this.timeDiffData));
+                dmin, dmax);
         
         String plotTitle = "Transmission Statistics";
         String xaxis = "Time (ms)";
@@ -97,9 +116,11 @@ public class ChartStatsWorker implements Runnable
         boolean urls = false;
         
         JFreeChart chart = ChartFactory.createHistogram(plotTitle, xaxis, yaxis, dataset, orientation, show, toolTips, urls);
+        chart.setAntiAlias(true);
+        chart.setBackgroundPaint(Color.WHITE);
         ChartPanel cpanel = new ChartPanel(chart);
         
-        StatsGui statistics = new StatsGui(cpanel);
+        StatsGui statistics = new StatsGui(cpanel, lmax, lmin, nSamples, packageSize);
         statistics.setVisible(true);
     }
 }

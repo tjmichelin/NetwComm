@@ -88,7 +88,7 @@ public class TCPClient extends Client
             
             //=======================SHOWING GRAPH================================
             
-            ChartStatsWorker stats = new ChartStatsWorker(timeDiff, 20, counter, pkgSize, this.timeInverval);
+            ChartStatsWorker stats = new ChartStatsWorker(timeDiff, 15, counter, pkgSize, this.timeInverval);
             Thread statsThread = new Thread(stats);
             statsThread.start();
             
