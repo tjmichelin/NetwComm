@@ -31,6 +31,7 @@ public class UDPServer extends Server
     @Override
     public void run()
     {
+        msg.printMessage("Starting UDP Server...");
         byte [] receiveData = new byte[1024];
         byte [] sendData = null;
         DatagramPacket receivePacket = null;
