@@ -38,7 +38,7 @@ public class LogStatsWorker implements Runnable
             
             for(int i = 0; i < this.timeseries.length; i++)
             {
-                writer.write(Integer.toString(i) + ";" + Long.toString(this.timeseries[i]));
+                writer.write(Integer.toString(i) + "," + Long.toString(this.timeseries[i]));
                 writer.newLine();
             }
             
